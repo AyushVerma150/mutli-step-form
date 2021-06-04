@@ -1,0 +1,31 @@
+.errorDiv
+{
+    width: 360px;
+    color:red;
+    font-size: 14px;
+    height:20px;
+}
+
+.divStyle
+{
+    background-color: white;
+    width:30%;
+    padding: 10px;
+}
+
+.inputStyle
+{
+    width: 400px;
+    background-color: transparent;
+    border-radius: 4px;
+}
+
+.labelStyle
+{
+   text-align: center;
+}
+
+.btnStyle
+{
+    border-radius: 10px;
+}
