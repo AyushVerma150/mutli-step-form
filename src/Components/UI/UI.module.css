@@ -29,3 +29,16 @@
 {
     border-radius: 10px;
 }
+.btnDivStyle
+{
+    background-color: white;
+    width:30%;
+    padding: 10px;
+    float:right;
+}
+
+.imgStyle
+{
+    height: 200px;
+    width:400px;
+}

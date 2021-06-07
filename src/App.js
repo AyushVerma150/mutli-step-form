@@ -5,18 +5,22 @@ import
   Stepper,
   Step,
   StepLabel,
-  Typography,
-  CircularProgress
 } from "@material-ui/core";
+import { Formik } from "formik";
 
-import { Formik, useFormik } from "formik";
-
-import Button from './Components/UI/Button';
+import
+{
+  formInitialValues,
+  formValidators
+} from './Components/FormModal/FormValidations';
 import Form from './Components/UI/Form';
-import BusinessProfile from './Components/Forms/BusinessProfile';
+import Button from './Components/UI/Button';
+import CheckOut from './Components/Forms/CheckOut';
+import IdentityProof from './Components/Forms/IdentityProof';
 import BankingDetails from './Components/Forms/BankingDetails';
+import BusinessProfile from './Components/Forms/BusinessProfile';
 
-import { formInitialValues, formValidators } from './Components/FormModal/FormValidations';
+import CONSTANTS from './Constants/Constants';
 import styles from './Components/Forms/Forms.module.css';
 
 
@@ -26,40 +30,46 @@ const renderActiveForm = ( activeStep, formProps ) =>
 {
   if ( activeStep === 0 )
   {
-    return <BusinessProfile formProps={formProps} />;  //formFields={formFields} 
+    return <BusinessProfile formProps={formProps} />;
   }
-  if ( activeStep === 1 )
+  else if ( activeStep === 1 )
   {
     return <BankingDetails formProps={formProps} />;
   }
-}
+  else if ( activeStep === 2 )
+  {
+    return <IdentityProof formProps={formProps} />;
+  }
+};
 
 const App = () =>
 {
 
-  const [stepCounter, setStepCounter] = useState( 0 );
 
+  const [stepCounter, setStepCounter] = useState( 0 );
   const validationSchema = formValidators[stepCounter];
+
 
   const renderNextForm = () =>
   {
-    alert( "I was called" );
-
-    if ( stepCounter < formSteps.length - 1 )
+    if ( stepCounter <= formSteps.length )
     {
       setStepCounter( stepCounter + 1 );
     }
-  }
+  };
 
-  function handleBack()
+  const renderPreviousForm = () =>
   {
-    setStepCounter( stepCounter - 1 );
-  }
+    if ( stepCounter > 0 )
+    {
+      const prevStep = stepCounter - 1;
+      setStepCounter( prevStep );
+    }
+  };
 
 
   return (
     <div>
-      <h1>Hello and welcome</h1>
       <Stepper activeStep={stepCounter}>
         {formSteps.map( ( formLabel ) => (
           <Step key={formLabel}>
@@ -67,39 +77,51 @@ const App = () =>
           </Step>
         ) )}
       </Stepper>
-
-      <Formik
-        initialValues={formInitialValues}
-        validationSchema={validationSchema}
-        onSubmit={( values, actions ) =>
-        {
-          alert( "Lets move to the next Form" );
-          renderNextForm();
-          actions.setTouched( {} );
-          actions.setSubmitting( false );
-        }}
-      >
-
-        {props => (
-          <Form submitHandler={props.handleSubmit} style={styles.FormStyle}>
-            {renderActiveForm( stepCounter, props )}
-
-            <div style={{ float: "right" }}>
-              <Button>
-                Next
-              </Button>
-              {stepCounter !== 0 && (
-                <Button clicked={handleBack}>
-                  Back
-                </Button>
-              )}
-              {/* <Button>
-                Back
-              </Button> */}
-            </div>
-          </Form>
-        )}
-      </Formik>
+      {
+        stepCounter === formSteps.length ?
+          <CheckOut /> :
+          <Formik
+            initialValues={formInitialValues}
+            validationSchema={validationSchema}
+            onSubmit={( _, actions ) =>
+            {
+              renderNextForm();
+              actions.setTouched( {} );
+              actions.setSubmitting( false );
+            }}
+          >
+            {
+              ( props ) =>
+              (
+                <Form
+                  submitHandler={props.handleSubmit}
+                  style={styles.FormStyle}
+                >
+                  {renderActiveForm( stepCounter, props )}
+                  <div className={styles.floatRight}>
+                    <Button type={CONSTANTS.UI.SUBMIT_TYPE}>
+                      {
+                        stepCounter === formSteps.length - 1 ?
+                          CONSTANTS.NAME.SUBMIT_BUTTON :
+                          CONSTANTS.NAME.NEXT_BUTTON
+                      }
+                    </Button>
+                    {
+                      stepCounter !== 0 && (
+                        <Button
+                          type={CONSTANTS.UI.BUTTON_TYPE}
+                          clicked={renderPreviousForm}
+                        >
+                          {CONSTANTS.NAME.PREV_BUTTON}
+                        </Button>
+                      )
+                    }
+                  </div>
+                </Form>
+              )
+            }
+          </Formik>
+      }
     </div >
   );
 }

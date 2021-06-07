@@ -2,6 +2,8 @@ import React from 'react';
 
 import { TextField } from '@material-ui/core';
 
+import CONSTANTS from '../../Constants/Constants';
+
 import styles from './UI.module.css';
 
 const Input = ( props ) =>
@@ -9,15 +11,10 @@ const Input = ( props ) =>
     return (
         <div className={styles.divStyle}>
             <TextField
-                variant="outlined"
+                {...props}
                 className={styles.inputStyle}
-                name={props.name}
-                label={props.label}
-                value={props.value}
-                onChange={props.changed}
-                error={props.error}
-                helperText={props.helperText}
-                autoComplete='off'
+                autoComplete={CONSTANTS.UI.AUTOCOMPLETE}
+                variant={CONSTANTS.UI.TEXT_FIELD_VARIANT}
             />
         </div>
     );

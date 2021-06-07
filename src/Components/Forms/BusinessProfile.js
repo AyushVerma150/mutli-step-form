@@ -1,9 +1,10 @@
 import React from 'react';
 
-import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
-
 import Input from '../UI/Input';
+
+import CONSTANTS from '../../Constants/Constants';
+
 import styles from './Forms.module.css';
 
 
@@ -11,21 +12,25 @@ const BusinessProfile = ( props ) =>
 {
     return (
         <div className={styles.divStyle}>
-            <p className={styles.formHeading}>Enter Your Business Details</p>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" style={{ height: "90px", width: "100px", margin: "0 auto" }} />
+            <p className={styles.formHeading}>{CONSTANTS.FORM_HEADING.BUSINESS_PROFILE}</p>
+            <Avatar
+                className={styles.avatarStyle}
+                src={CONSTANTS.UI.DUMMY_AVATAR}
+                alt={CONSTANTS.UI.IMG_UN_AVAILABlE}
+            />
             <Input
-                name="businessName"
-                label="Business Name"
+                name={CONSTANTS.FIELDS.BUSINESS_NAME_TITLE}
+                label={CONSTANTS.FIELDS.BUSINESS_NAME_LABEL}
                 value={props.formProps.values.businessName}
-                changed={props.formProps.handleChange}
+                onChange={props.formProps.handleChange}
                 error={props.formProps.touched.businessName && Boolean( props.formProps.errors.businessName )}
                 helperText={props.formProps.touched.businessName && props.formProps.errors.businessName}
             />
             <Input
-                name="businessWebsite"
-                label="Business Website"
+                name={CONSTANTS.FIELDS.BUSINESS_WEBSITE_TITLE}
+                label={CONSTANTS.FIELDS.BUSINESS_WEBSITE_LABEL}
                 value={props.formProps.values.businessWebsite}
-                changed={props.formProps.handleChange}
+                onChange={props.formProps.handleChange}
                 error={props.formProps.touched.businessWebsite && Boolean( props.formProps.errors.businessWebsite )}
                 helperText={props.formProps.touched.businessWebsite && props.formProps.errors.businessWebsite}
             />

@@ -1,36 +1,39 @@
 
-
 import { useFormikContext } from 'formik';
-
 import
 {
     MuiPickersUtilsProvider,
-    KeyboardTimePicker,
     KeyboardDatePicker
 } from "@material-ui/pickers";
-
 import DateFnsUtils from "@date-io/date-fns";
+
+import CONSTANTS from '../../Constants/Constants';
+
 import styles from './UI.module.css';
 
-const DatePickerComponent = ( props ) =>
+const DatePickerComponent = ( { name, value, error, label, helperText } ) =>
 {
 
     const { setFieldValue } = useFormikContext();
+
+    const dateChangeHandler = ( date ) =>
+    {
+        setFieldValue( name, date );
+    };
 
     return (
         <div className={styles.divStyle}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
-                    id="date-picker-dialog"
-                    autoComplete='off'
+                    value={value}
+                    error={error}
+                    label={label}
+                    helperText={helperText}
+                    onChange={dateChangeHandler}
                     className={styles.inputStyle}
-                    label="Date of Birth"
-                    inputVariant="outlined"
-                    format="mm/dd/yyyy"
-                    value={props.value}
-                    error={props.error}
-                    helperText={props.helperText}
-                    onChange={value => setFieldValue( "dateOfBirth", value )}
+                    autoComplete={CONSTANTS.UI.AUTOCOMPLETE}
+                    format={CONSTANTS.UI.DATE_PICKER_FORMAT}
+                    inputVariant={CONSTANTS.UI.DATE_PICKER_VARIANT}
                     KeyboardButtonProps={{
                         "aria-label": "change date"
                     }}

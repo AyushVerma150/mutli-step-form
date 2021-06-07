@@ -1,20 +1,26 @@
 import * as Yup from 'yup';
-import moment from 'moment';
-import { formSchema } from './FormSchema';
+
+import { validateDateOfBirth, validateBankAccount } from '../../Utils/Utils';
+
+import CONSTANTS from '../../Constants/Constants';
+
 
 
 export const formInitialValues =
 {
-    businessName: "",
-    businessWebsite: "",
-    firstName: "",
+    zip: "",
+    city: "",
+    ssnCode: "",
     lastName: "",
-    dateOfBirth: null,
+    firstName: "",
+    proofBack: "",
+    proofFront: "",
+    bankAccount: "",
+    businessName: "",
     streetAddress: "",
-    city: ""
+    dateOfBirth: null,
+    businessWebsite: "",
 };
-
-const isUrlValid = /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/;
 
 export const formValidators = [
     Yup.object(
@@ -22,50 +28,74 @@ export const formValidators = [
             businessName:
                 Yup
                     .string()
-                    .required( "This is required field*" ),
+                    .required( CONSTANTS.FORMIK.REQUIRED_FIELD ),
             businessWebsite:
                 Yup
                     .string()
-                    .matches( isUrlValid, "Please enter a valid URL*" )
-                    .required( "This is required field*" ),
+                    .matches( CONSTANTS.URL.VALID_URL, CONSTANTS.FORMIK.BUSINESS_WEBSITE )
+                    .required( CONSTANTS.FORMIK.REQUIRED_FIELD ),
         } ),
     Yup.object( {
         firstName:
             Yup
                 .string()
-                .required( "This is required field*" ),
+                .required( CONSTANTS.FORMIK.REQUIRED_FIELD ),
         lastName:
             Yup
                 .string()
-                .required( "This is required field*" ),
+                .required( CONSTANTS.FORMIK.REQUIRED_FIELD ),
         dateOfBirth:
             Yup
                 .date()
                 .nullable()
-                .required( "This is required field*" )
-                .test( "expDate", "You must be 13 years or older to use this app*", ( val ) =>
+                .required( CONSTANTS.FORMIK.REQUIRED_FIELD )
+                .test( "expDate", CONSTANTS.FORMIK.DATE_OF_BIRTH, ( val ) =>
                 {
                     if ( val )
                     {
-                        console.log( "Inside Date Validation" )
-                        const startDate = new Date( 1900, 12, 31 );
-                        const endDate = new Date( 2007, 12, 31 );
-                        if ( moment( val, moment.ISO_8601 ).isValid() )
-                        {
-                            console.log( "What am i ? ", val );
-                            return moment( val ).isBetween( startDate, endDate );
-                        }
-                        return false;
+                        return validateDateOfBirth( val );
                     }
                     return false;
                 } ),
         streetAddress:
             Yup
                 .string()
-                .required( "This is required field*" ),
+                .required( CONSTANTS.FORMIK.REQUIRED_FIELD ),
         city:
             Yup
                 .string()
-                .required( "This is required field*" ),
+                .required( CONSTANTS.FORMIK.REQUIRED_FIELD ),
+        ssnCode:
+            Yup
+                .string()
+                .required( CONSTANTS.FORMIK.REQUIRED_FIELD )
+                .length( 4, CONSTANTS.FORMIK.SSN_CODE ),
+        bankAccount:
+            Yup
+                .string()
+                .required( CONSTANTS.FORMIK.REQUIRED_FIELD )
+                .test( 'bankAccount', CONSTANTS.FORMIK.BANK_ACCOUNT, ( val ) =>
+                {
+                    if ( val )
+                    {
+                        return validateBankAccount( val );
+                    }
+                    return false;
+                } ),
+        zip:
+            Yup
+                .string()
+                .required( CONSTANTS.FORMIK.REQUIRED_FIELD )
+                .length( 6, CONSTANTS.FORMIK.ZIP ),
+    } ),
+    Yup.object( {
+        proofFront:
+            Yup
+                .mixed()
+                .required( CONSTANTS.FORMIK.REQUIRED_FIELD ),
+        proofBack:
+            Yup
+                .mixed()
+                .required( CONSTANTS.FORMIK.REQUIRED_FIELD )
     } )
 ];

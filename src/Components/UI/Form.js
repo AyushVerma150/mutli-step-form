@@ -1,10 +1,13 @@
 import React from 'react';
 
-const form = ( props ) =>
+const form = ( { style, submitHandler, children } ) =>
 {
     return (
-        <form className={props.style} onSubmit={props.submitHandler}>
-            {props.children}
+        <form
+            className={style}
+            onSubmit={submitHandler}
+        >
+            {children}
         </form>
     );
 

@@ -1,24 +1,23 @@
 import { Button } from '@material-ui/core';
 
+import CONSTANTS from '../../Constants/Constants';
+
 import styles from './UI.module.css';
 
-const ButtonComponent = ( { children, clicked } ) =>
+const ButtonComponent = ( { children, clicked, type } ) =>
 {
-
-
     return (
-        <div className={styles.divStyle} style={{ float: "right" }}>
+        <div className={styles.btnDivStyle} >
             <Button
-                type="submit"
-                color="primary"
+                type={type}
                 onClick={clicked}
-                variant="contained"
                 className={styles.btnStyle}
+                color={CONSTANTS.UI.BUTTON_COLOR}
+                variant={CONSTANTS.UI.BUTTON_VARIANT}
             >
                 {children}
             </Button>
-        </div>
-    )
+        </div> );
 };
 
 export default ButtonComponent;
